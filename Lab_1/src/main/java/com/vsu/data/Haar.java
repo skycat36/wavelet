@@ -14,16 +14,15 @@ public class Haar {
 
     private static final int MAX_EVAL = 1000000000;
 
-    private int n, a, b, m;
+    private int a, b, m;
 
     private int accuracy; // точность
 
-    private List<Double> resultList;
+    private List<PointHaar> resultList;
 
     private BaseAbstractUnivariateIntegrator baseAbstractUnivariateIntegrator = new TrapezoidIntegrator();
 
-    public Haar(int n, int a, int b, int m, int accuracy) {
-        this.n = n;
+    public Haar(int a, int b, int m, int accuracy) {
         this.a = a;
         this.b = b;
         this.m = m;
@@ -34,44 +33,64 @@ public class Haar {
         return Math.exp(-15 * Math.abs(x - 0.3)) + Math.pow(x, 2);
     }
 
-    private double funcWeveHaar(double x, double i){
+    private double funcWeveHaar(double x, int i, int j){
 
-        double del = Math.pow(2, this.m);
-        double del2 = Math.pow(2, this.m + 1);
+        double del = Math.pow(2, i);
+        double del2 = Math.pow(2, i + 1);
 
-        if ( (((i-1) / del) < x) & (x < (((i-1) / del) + 1 / del2)) ){
-            return Math.pow(2, this.m / 2);
+        if ( (((j-1) / del) < x) & (x < (((j-1) / del) + 1 / del2)) ){
+            return Math.pow(2, i / 2);
         }
 
-        if ( (x > (((i-1) / del) + 1 / del2)) & (x < (i / del)) ){
-            return -Math.pow(2, this.m / 2);
+        if ( (x > (((j-1) / del) + 1 / del2)) & (x < (j / del)) ){
+            return -Math.pow(2, i / 2);
         }
 
-        if ( ((i - 1) / del) < x || (i / del) > x ){
+        if ( ((j - 1) / del) > x || (j / del) < x ){
             return 0;
         }
         return 0;
     }
 
 
+    private double calcIntegralA0(){
+        UnivariateFunction f = (x0) -> funcF(x0);
 
-    private double calcIntegralC(int i){
-        UnivariateFunction f = (x0) -> this.funcF(x0) * this.funcWeveHaar(x0, i);
+        return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f, this.a, this.b);
+    }
+
+    private double calcIntegralC(int i, int j){
+        UnivariateFunction f = (x0) -> this.funcF(x0) * this.funcWeveHaar(x0, i, j);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f, this.a, this.b);
     }
 
 
     public void calculeteWave(){
-        this.resultList = new ArrayList<Double>();
+        this.resultList = new ArrayList<PointHaar>();
 
-        for (int i = 1; i <= this.n; i++){
-            this.resultList.add(
-                    Precision.round(
-                            calcIntegralC(i),
-                            this.accuracy
-                    )
-            );
+        this.resultList.add(new PointHaar(0, this.calcIntegralA0()));
+
+        int number = 1;
+
+        int n = (int)Math.pow(2, this.m);
+
+        for (int i = 0; i <= this.m; i++){
+
+            for (int j=1; j < n; j++) {
+
+
+                this.resultList.add(
+                        new PointHaar(
+                                number,
+                                Precision.round(
+                                        calcIntegralC(i, j),
+                                        this.accuracy
+                                )
+                        )
+                );
+                number++;
+            }
         }
 
     }
@@ -85,13 +104,13 @@ public class Haar {
 
     public double prove(){
         double powElem = 0;
-        for (Double ch : this.resultList){
-            powElem += Math.pow(ch, 2);
+        for (PointHaar ch : this.resultList){
+            powElem += Math.pow(ch.getValue(), 2);
         }
         return Math.sqrt(calcNormA0()) - Math.sqrt(powElem);
     }
 
-    public List<Double> getResultList() {
+    public List<PointHaar> getResultList() {
         return resultList;
     }
 }

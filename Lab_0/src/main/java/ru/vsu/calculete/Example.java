@@ -54,7 +54,7 @@ public class Example{
 
         this.resultList.add(
                 Precision.round(
-                        (this.calcA0() / Math.sqrt(this.L)),
+                        (this.calcA0() / Math.sqrt(this.L * 2)),
                         this.accuracy
                 )
         );
