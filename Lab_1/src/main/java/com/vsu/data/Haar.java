@@ -30,23 +30,23 @@ public class Haar {
     }
 
     private double funcF(double x){
-        return Math.exp(-15 * Math.abs(x - 0.3)) + Math.pow(x, 2);
+        return Math.exp(-15.0 * Math.abs(x - 0.3)) + Math.pow(x, 2.0);
     }
 
     private double funcWeveHaar(double x, int i, int j){
 
-        double del = Math.pow(2, i);
-        double del2 = Math.pow(2, i + 1);
+        double del = Math.pow(2.0, i);
+        double del2 = Math.pow(2.0, i + 1.0);
 
-        if ( (((j-1) / del) < x) & (x < (((j-1) / del) + 1 / del2)) ){
-            return Math.pow(2, i / 2);
+        if ( (((j-1.0) / del) < x) && (x <= (((j-1.0) / del) + (1.0 / del2))) ){
+            return Math.pow(2.0, i / 2.0);
         }
 
-        if ( (x > (((j-1) / del) + 1 / del2)) & (x < (j / del)) ){
-            return -Math.pow(2, i / 2);
+        if ( (x > (((j-1) / del) + (1.0 / del2))) && (x < (j / del)) ){
+            return (-1) * Math.pow(2.0, i / 2.0);
         }
 
-        if ( ((j - 1) / del) > x || (j / del) < x ){
+        if ( ((j - 1.0) / del) > x | (j / del) < x ){
             return 0;
         }
         return 0;
@@ -73,11 +73,12 @@ public class Haar {
 
         int number = 1;
 
-        int n = (int)Math.pow(2, this.m);
+
 
         for (int i = 0; i <= this.m; i++){
+            int n = (int)Math.pow(2.0, i);
 
-            for (int j=1; j < n; j++) {
+            for (int j=1; j <= n; j++) {
 
 
                 this.resultList.add(
@@ -97,7 +98,7 @@ public class Haar {
 
 
     private double calcNormA0(){
-        UnivariateFunction f0 = (x0) -> Math.pow(this.funcF(x0) , 2);
+        UnivariateFunction f0 = (x0) -> Math.pow(this.funcF(x0) , 2.0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f0, this.a, this.b);
     }
@@ -105,7 +106,7 @@ public class Haar {
     public double prove(){
         double powElem = 0;
         for (PointHaar ch : this.resultList){
-            powElem += Math.pow(ch.getValue(), 2);
+            powElem += Math.pow(ch.getValue(), 2.0);
         }
         return Math.sqrt(calcNormA0()) - Math.sqrt(powElem);
     }

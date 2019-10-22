@@ -8,7 +8,7 @@ import java.util.List;
 public class App {
     private final static double PI = Math.PI; //число Пи
 
-    private static int accuracy = 3; // точность
+    private static int accuracy = 7; // точность
 
     private static int N = 10; // количество точек
 
