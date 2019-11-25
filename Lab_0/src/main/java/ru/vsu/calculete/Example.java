@@ -31,20 +31,24 @@ public class Example{
         this.sqlrtL = Math.sqrt(L);
     }
 
+    private double funcF(double x){
+        return (Math.pow(x, 3.0) / 17.0) * Math.exp( 2.0 * x - 1.0);
+    }
+
     private double calcA0(){
-        UnivariateFunction f0 = (x0) -> x0*x0 - 5 * x0;
+        UnivariateFunction f0 = (x0) -> this.funcF(x0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f0, 0, this.L);
     }
 
     private double calcBn(int i){
-        UnivariateFunction f = (x0) -> (x0 * x0 - 5 * x0) * Math.cos(i * x0);
+        UnivariateFunction f = (x0) -> this.funcF(x0) * Math.cos(2.0 * i * x0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f, 0, this.L);
     }
 
     private double calcAn(int i){
-        UnivariateFunction f = (x0) -> (x0 * x0 - 5 * x0) * Math.sin(i * x0);
+        UnivariateFunction f = (x0) -> this.funcF(x0) * Math.sin(2.0 * i * x0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f, 0, this.L);
     }
@@ -54,7 +58,7 @@ public class Example{
 
         this.resultList.add(
                 Precision.round(
-                        (this.calcA0() / Math.sqrt(this.L * 2)),
+                        (this.calcA0() / Math.sqrt(this.L)),
                         this.accuracy
                 )
         );
@@ -62,14 +66,14 @@ public class Example{
         for (int i = 1, j = 1; i < this.N; i = i + 2, j++){
             this.resultList.add(
                     Precision.round(
-                            (calcAn(j)) / Math.sqrt(this.L / 2),
+                            (calcAn(j)) * Math.sqrt(2.0 / this.L),
                             this.accuracy
                     )
             );
 
             this.resultList.add(
                     Precision.round(
-                            (calcBn(j)) / Math.sqrt(this.L / 2),
+                            (calcBn(j)) * Math.sqrt( 2.0 / this.L),
                             this.accuracy
                     )
             );
@@ -78,7 +82,7 @@ public class Example{
     }
 
     private double calcNormA0(){
-        UnivariateFunction f0 = (x0) -> Math.pow(x0*x0 - 5 * x0 , 2);
+        UnivariateFunction f0 = (x0) -> Math.pow(this.funcF(x0) , 2.0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f0, 0, this.L);
     }
@@ -86,7 +90,7 @@ public class Example{
     public double prove(){
         double powElem = 0;
         for (Double ch : this.resultList){
-            powElem += Math.pow(ch, 2);
+            powElem += Math.pow(ch, 2.0);
         }
         return Math.sqrt(calcNormA0()) - Math.sqrt(powElem);
     }
