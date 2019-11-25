@@ -43,7 +43,7 @@ public class App {
         }
 
 
-        List compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 40);
+        List compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 20);
         System.out.println("Сжатый массив данных:");
         compressData.stream().forEach(x -> System.out.printf("%6s ", x ));
 

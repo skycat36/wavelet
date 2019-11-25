@@ -76,18 +76,16 @@ public class ExecuterHaar extends AbstractExecuter{
         List<Integer> result = new ArrayList<>();
 
         List<PairNumber> pairNumberList = new ArrayList<>();
-        for (int i=0; i < devideComlete; i += 2){
-            pairNumberList.add(new PairNumber((int)arr.get(i), (int)arr.get(i+1)));
+        for (int i=0; i < devideComlete; i ++){
+            pairNumberList.add(new PairNumber((int)arr.get(i), (int)arr.get(devideComlete+i)));
         }
 
         for (PairNumber pairNumber: pairNumberList){
             result.add(pairNumber.sum());
-        }
-        for (PairNumber pairNumber: pairNumberList){
             result.add(pairNumber.ruz());
         }
 
-        result.addAll(arr.subList(devideComlete, arr.size()));
+        result.addAll(arr.subList(devideComlete * 2, arr.size()));
 
         return result;
     }
