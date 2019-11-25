@@ -10,6 +10,15 @@ public class PairNumber {
         this.b = b;
     }
 
+
+    public int sum(){
+        return (int) (this.a + this.b);
+    }
+
+    public int ruz(){
+        return (int) (this.a - this.b);
+    }
+
     public int polSum(){
         return (int) (this.a + this.b) / 2;
     }

@@ -7,6 +7,7 @@ import com.vsu.data.wave.DoG;
 import com.vsu.data.wave.Func;
 import com.vsu.data.wave.PointWave;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,8 +32,28 @@ public class App {
 
         ExecuterHaar haarExecuterHaar = new ExecuterHaar();
         List arr = Arrays.asList(419, 411, 419, 399, 434, 384, 410, 404);
-        haarExecuterHaar.maxCompress(arr);
 
+        System.out.println("Разложение массива по Хоару:");
+        List<List<Integer>> resultList = haarExecuterHaar.transformHaar(arr);
+        for (List arrHaar: resultList){
+            arrHaar.stream().forEach(
+                    x -> System.out.printf("%6s ", x )
+            );
+            System.out.println();
+        }
+
+
+        List compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 40);
+        System.out.println("Сжатый массив данных:");
+        compressData.stream().forEach(x -> System.out.printf("%6s ", x ));
+
+        System.out.println("\nВостановленный массив");
+        for (List arrHaar: haarExecuterHaar.remoteTransformHaar(compressData)){
+            arrHaar.stream().forEach(
+                    x -> System.out.printf("%6s ", x )
+            );
+            System.out.println();
+        }
     }
 
     private static void printResult(AbstractExecuter abstractExecuter) {
