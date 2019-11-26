@@ -1,14 +1,13 @@
 package com.vsu.data;
 
+import com.vsu.data.inaccuracy.Accuracy;
 import com.vsu.data.wave.Func;
 import com.vsu.data.wave.PointWave;
 import com.vsu.data.wave.Wave;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.integration.BaseAbstractUnivariateIntegrator;
 import org.apache.commons.math3.analysis.integration.TrapezoidIntegrator;
-import org.apache.commons.math3.util.Precision;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractExecuter {
@@ -20,6 +19,8 @@ public abstract class AbstractExecuter {
     protected double m;
 
     protected int accuracy; // точность
+
+    protected Accuracy accuracyMethod;
 
     private Wave matherWave;
 
@@ -55,12 +56,14 @@ public abstract class AbstractExecuter {
 
     abstract public void calculeteWave();
 
-
-
     protected double calcNormA0(){
         UnivariateFunction f0 = (x0) -> Math.pow(this.func.value(x0) , 2.0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f0, this.a, this.b);
+    }
+
+    public double calculeteAccurancy(List<Integer> arrReal, List<Integer> arrCompress){
+        return this.accuracyMethod.calcAccuracy(arrReal, arrCompress);
     }
 
     public double prove(){
@@ -73,5 +76,9 @@ public abstract class AbstractExecuter {
 
     public List<PointWave> getResultList() {
         return resultList;
+    }
+
+    public void setAccuracyMethod(Accuracy accuracyMethod) {
+        this.accuracyMethod = accuracyMethod;
     }
 }

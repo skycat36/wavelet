@@ -3,6 +3,8 @@ package com.vsu.app;
 import com.vsu.data.AbstractExecuter;
 import com.vsu.data.ExecuterDoG;
 import com.vsu.data.ExecuterHaar;
+import com.vsu.data.inaccuracy.IntDeviation;
+import com.vsu.data.inaccuracy.PSNR;
 import com.vsu.data.wave.DoG;
 import com.vsu.data.wave.Func;
 import com.vsu.data.wave.PointWave;
@@ -31,7 +33,7 @@ public class App {
 //        executerDoG.calculeteWave();
 
         ExecuterHaar haarExecuterHaar = new ExecuterHaar();
-        List arr = Arrays.asList(419, 411, 419, 399, 434, 384, 410, 404);
+        List arr = Arrays.asList(249, 247, 243, 241, 180, 184, 235, 237);
 
         System.out.println("Разложение массива по Хоару:");
         List<List<Integer>> resultList = haarExecuterHaar.transformHaar(arr);
@@ -43,17 +45,26 @@ public class App {
         }
 
 
-        List compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 20);
+        List compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 40);
         System.out.println("Сжатый массив данных:");
         compressData.stream().forEach(x -> System.out.printf("%6s ", x ));
 
-        System.out.println("\nВостановленный массив");
-        for (List arrHaar: haarExecuterHaar.remoteTransformHaar(compressData)){
+        List<List<Integer>> repairArr = haarExecuterHaar.remoteTransformHaar(compressData);
+        System.out.println("\nВостановленный массив:");
+        for (List arrHaar: repairArr){
             arrHaar.stream().forEach(
                     x -> System.out.printf("%6s ", x )
             );
             System.out.println();
         }
+
+        System.out.println("\nСреднепиксельная ошибка:");
+        haarExecuterHaar.setAccuracyMethod(new IntDeviation());
+        System.out.println(haarExecuterHaar.calculeteAccurancy(arr, repairArr.get(repairArr.size()-1)));
+
+        System.out.println("\nПиковое отношение сигнала к шуму:");
+        haarExecuterHaar.setAccuracyMethod(new PSNR(255));
+        System.out.println(haarExecuterHaar.calculeteAccurancy(arr, repairArr.get(repairArr.size()-1)));
     }
 
     private static void printResult(AbstractExecuter abstractExecuter) {
