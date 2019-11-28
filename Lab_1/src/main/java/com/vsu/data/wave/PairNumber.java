@@ -2,28 +2,28 @@ package com.vsu.data.wave;
 
 public class PairNumber {
 
-    private int a;
-    private int b;
+    private double a;
+    private double b;
 
-    public PairNumber(int a, int b) {
+    public PairNumber(double a, double b) {
         this.a = a;
         this.b = b;
     }
 
 
-    public int sum(){
-        return (int) (this.a + this.b);
+    public double sum(){
+        return (this.a + this.b);
     }
 
-    public int ruz(){
-        return (int) (this.a - this.b);
+    public double ruz(){
+        return (this.a - this.b);
     }
 
-    public int polSum(){
-        return (int) (this.a + this.b) / 2;
+    public double polSum(){
+        return (this.a + this.b) / 2;
     }
 
-    public int polRuz(){
-        return (int) (this.a - this.b) / 2;
+    public double polRuz(){
+        return (this.a - this.b) / 2;
     }
 }

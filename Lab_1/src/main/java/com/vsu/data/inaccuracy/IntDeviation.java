@@ -4,7 +4,7 @@ import java.util.List;
 
 public class IntDeviation implements Accuracy {
     @Override
-    public double calcAccuracy(List<Integer> arrReal, List<Integer> repairArr) {
+    public double calcAccuracy(List<Double> arrReal, List<Double> repairArr) {
         double result = 0;
 
         for (int i = 0; i < arrReal.size(); i++){

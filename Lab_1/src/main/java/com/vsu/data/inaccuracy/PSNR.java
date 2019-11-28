@@ -13,7 +13,7 @@ public class PSNR implements Accuracy {
     }
 
     @Override
-    public double calcAccuracy(List<Integer> arrReal, List<Integer> arrCompress) {
+    public double calcAccuracy(List<Double> arrReal, List<Double> arrCompress) {
 
         double result = 0.0;
 
@@ -23,7 +23,9 @@ public class PSNR implements Accuracy {
 
         result /= arrReal.size();
 
-        result = 10.0 * Math.log10(Math.pow(this.maxNumber, 2.0) / result);
+        if (result != 0) {
+            result = 10.0 * Math.log10(Math.pow(this.maxNumber, 2.0) / result);
+        }
 
         return result;
     }

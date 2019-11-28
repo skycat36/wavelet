@@ -12,6 +12,9 @@ import com.vsu.data.wave.PointWave;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class App {
     private final static double PI = Math.PI; //число Пи
@@ -33,10 +36,12 @@ public class App {
 //        executerDoG.calculeteWave();
 
         ExecuterHaar haarExecuterHaar = new ExecuterHaar();
+        //249, 247, 243, 241, 180, 184, 235, 237
+        //13.5,2.5,-1,3
         List arr = Arrays.asList(249, 247, 243, 241, 180, 184, 235, 237);
 
         System.out.println("Разложение массива по Хоару:");
-        List<List<Integer>> resultList = haarExecuterHaar.transformHaar(arr);
+        List<List<Double>> resultList = haarExecuterHaar.transformHaar(arr);
         for (List arrHaar: resultList){
             arrHaar.stream().forEach(
                     x -> System.out.printf("%6s ", x )
@@ -45,11 +50,11 @@ public class App {
         }
 
 
-        List compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 40);
+        List<Double> compressData = haarExecuterHaar.compressArr(new ArrayList<>(resultList.get(resultList.size()-1)), 40);
         System.out.println("Сжатый массив данных:");
         compressData.stream().forEach(x -> System.out.printf("%6s ", x ));
 
-        List<List<Integer>> repairArr = haarExecuterHaar.remoteTransformHaar(compressData);
+        List<List<Double>> repairArr = haarExecuterHaar.remoteTransformHaar(compressData);
         System.out.println("\nВостановленный массив:");
         for (List arrHaar: repairArr){
             arrHaar.stream().forEach(

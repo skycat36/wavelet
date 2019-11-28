@@ -8,6 +8,7 @@ import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.integration.BaseAbstractUnivariateIntegrator;
 import org.apache.commons.math3.analysis.integration.TrapezoidIntegrator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractExecuter {
@@ -62,8 +63,8 @@ public abstract class AbstractExecuter {
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f0, this.a, this.b);
     }
 
-    public double calculeteAccurancy(List<Integer> arrReal, List<Integer> arrCompress){
-        return this.accuracyMethod.calcAccuracy(arrReal, arrCompress);
+    public double calculeteAccurancy(List<Double> arrReal, List<Double> arrCompress){
+        return this.accuracyMethod.calcAccuracy(proveAndConvertToDouble(arrReal), proveAndConvertToDouble(arrCompress));
     }
 
     public double prove(){
@@ -80,5 +81,11 @@ public abstract class AbstractExecuter {
 
     public void setAccuracyMethod(Accuracy accuracyMethod) {
         this.accuracyMethod = accuracyMethod;
+    }
+
+    protected List proveAndConvertToDouble(List arr){
+        List<Double> result = new ArrayList<>();
+        arr.forEach(x -> result.add(Double.parseDouble(x.toString())));
+        return result;
     }
 }

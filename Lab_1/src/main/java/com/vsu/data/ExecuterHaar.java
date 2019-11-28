@@ -39,11 +39,12 @@ public class ExecuterHaar extends AbstractExecuter{
         }
     }
 
-    public List<List<Integer>> transformHaar(List arr){
+    public List<List<Double>> transformHaar(List arr){
+        arr = proveAndConvertToDouble(arr);
         List result = new ArrayList();
         result.add(arr);
         int devide = arr.size();
-        for (int i=0; i <= Math.sqrt(arr.size()); i++){
+        for (int i=0; i < Math.sqrt(arr.size()); i++){
             arr = averageArr(arr, devide);
             devide /= 2;
             result.add(arr);
@@ -51,13 +52,12 @@ public class ExecuterHaar extends AbstractExecuter{
         return result;
     }
 
-
-    public List<Integer> averageArr(List arr, int devideComlete) {
-        List<Integer> result = new ArrayList<>();
+    private List<Double> averageArr(List arr, int devideComlete) {
+        List<Double> result = new ArrayList<>();
 
         List<PairNumber> pairNumberList = new ArrayList<>();
         for (int i=0; i < devideComlete; i += 2){
-            pairNumberList.add(new PairNumber((int)arr.get(i), (int)arr.get(i+1)));
+            pairNumberList.add(new PairNumber(Double.parseDouble(arr.get(i).toString()), Double.parseDouble(arr.get(i+1).toString())));
         }
 
         for (PairNumber pairNumber: pairNumberList){
@@ -72,12 +72,12 @@ public class ExecuterHaar extends AbstractExecuter{
         return result;
     }
 
-    public List<Integer> averageRemoteArr(List arr, int devideComlete) {
-        List<Integer> result = new ArrayList<>();
+    public List<Double> averageRemoteArr(List arr, int devideComlete) {
+        List<Double> result = new ArrayList<>();
 
         List<PairNumber> pairNumberList = new ArrayList<>();
         for (int i=0; i < devideComlete; i ++){
-            pairNumberList.add(new PairNumber((int)arr.get(i), (int)arr.get(devideComlete+i)));
+            pairNumberList.add(new PairNumber(Double.parseDouble(arr.get(i).toString()), Double.parseDouble(arr.get(devideComlete + i).toString())));
         }
 
         for (PairNumber pairNumber: pairNumberList){
@@ -90,21 +90,21 @@ public class ExecuterHaar extends AbstractExecuter{
         return result;
     }
 
-    public List compressArr(List<Integer> arr, int procentCompr){
+    public List compressArr(List<Double> arr, int procentCompr){
         int countNumbersWhoNeedDelete = (arr.size() * procentCompr) / 100;
 
         while (countNumbersWhoNeedDelete > 0){
-            int minEl = Math.abs(arr.get(0));
+            double minEl = Math.abs(arr.get(0));
 
-            for (Integer a: arr){
+            for (Double a: arr){
                 if (Math.abs(a) < minEl && a != 0){
-                    minEl = a;
+                    minEl = Math.abs(a);
                 }
             }
 
             for (int i = arr.size() - 1; i > 0; i-- ){
                 if (Math.abs(arr.get(i)) == minEl && countNumbersWhoNeedDelete > 0){
-                    arr.set(i, 0);
+                    arr.set(i, 0.0);
                     countNumbersWhoNeedDelete--;
                 }
             }
@@ -113,11 +113,12 @@ public class ExecuterHaar extends AbstractExecuter{
     }
 
 
-    public List<List<Integer>> remoteTransformHaar(List arr){
+    public List<List<Double>> remoteTransformHaar(List arr){
+        arr = proveAndConvertToDouble(arr);
         List result = new ArrayList();
         result.add(arr);
         int devide = 1;
-        for (int i=0; i <= Math.sqrt(arr.size()); i++){
+        for (int i=0; i < Math.sqrt(arr.size()); i++){
             arr = averageRemoteArr(arr, devide);
             devide *= 2;
             result.add(arr);
