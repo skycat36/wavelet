@@ -1,11 +1,12 @@
 package com.vsu.data.executers;
 
-import com.vsu.data.inaccuracy.Accuracy;
+import com.vsu.data.inaccuracy.Accurancy;
 import com.vsu.data.wave.Func;
 import com.vsu.data.wave.PointWave;
 import com.vsu.data.wave.MatherWave;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.integration.BaseAbstractUnivariateIntegrator;
+import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 import org.apache.commons.math3.analysis.integration.TrapezoidIntegrator;
 import org.apache.commons.math3.util.Precision;
 
@@ -15,22 +16,30 @@ import java.util.List;
 public abstract class AbstractExecuter {
     private final static double PI = Math.PI; //число Пи
 
-    private static final int MAX_EVAL = 1000000000;
+    //Максимальное разбиение интеграла
+    private static final int MAX_EVAL = 1_000_000_000;
 
+    //Границы интегрирования
     protected double a, b;
+
+    //Для вычисления вейвлета заданного как массив
     protected double m, n;
 
     protected int accuracy; // точность
 
-    protected Accuracy accuracyMethod;
+    protected Accurancy accurancyMethod;
 
+    // Материнский вейвлет
     private MatherWave matherWave;
 
+    // Функция для вейвлета
     private Func func;
 
+    //Точки вычисленного вейвлета
     protected List<PointWave> resultList;
 
-    private BaseAbstractUnivariateIntegrator baseAbstractUnivariateIntegrator = new TrapezoidIntegrator();
+    //Метод вычисления интеграла
+    private BaseAbstractUnivariateIntegrator baseAbstractUnivariateIntegrator = new SimpsonIntegrator();
 
     public AbstractExecuter() {
     }
@@ -76,16 +85,19 @@ public abstract class AbstractExecuter {
         }
     }
 
+    //Посчитать норму
     protected double calcNormA0(){
         UnivariateFunction f0 = (x0) -> Math.pow(this.func.value(x0) , 2.0);
 
         return baseAbstractUnivariateIntegrator.integrate(MAX_EVAL, f0, this.a, this.b);
     }
 
+    //Посчитать погрешность
     public double calculeteAccurancy(List<Double> arrReal, List<Double> arrCompress){
-        return this.accuracyMethod.calcAccuracy(proveAndConvertToDouble(arrReal), proveAndConvertToDouble(arrCompress));
+        return this.accurancyMethod.calcAccuracy(proveAndConvertToDouble(arrReal), proveAndConvertToDouble(arrCompress));
     }
 
+    //Проверка Парсиваля
     public double prove(){
         double powElem = 0;
         for (PointWave ch : this.resultList){
@@ -98,8 +110,8 @@ public abstract class AbstractExecuter {
         return resultList;
     }
 
-    public void setAccuracyMethod(Accuracy accuracyMethod) {
-        this.accuracyMethod = accuracyMethod;
+    public void setAccurancyMethod(Accurancy accurancyMethod) {
+        this.accurancyMethod = accurancyMethod;
     }
 
     protected List proveAndConvertToDouble(List arr){

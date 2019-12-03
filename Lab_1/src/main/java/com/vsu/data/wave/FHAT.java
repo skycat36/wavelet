@@ -6,14 +6,14 @@ public class FHAT extends MatherWave {
         x = Math.abs(x);
 
         if (x <= 1.0 / 3.0){
-            return 1;
+            return 1.0;
         }
         if (1.0 / 3.0 < x & x <= 1.0){
             return -0.5;
         }
         if (x > 1.0){
-            return 0;
+            return 0.0;
         }
-        return 0;
+        return 0.0;
     }
 }

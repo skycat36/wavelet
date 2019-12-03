@@ -1,5 +1,6 @@
 package com.vsu.data.executers;
 
+import com.vsu.data.inaccuracy.Accurancy;
 import com.vsu.data.wave.*;
 import org.apache.commons.math3.util.Precision;
 
@@ -90,8 +91,11 @@ public class ExecuterHaar extends AbstractExecuter {
         return result;
     }
 
-    public List compressArr(List<Double> arr, int procentCompr){
-        int countNumbersWhoNeedDelete = (arr.size() * procentCompr) / 100;
+    public List compressArr(List<Double> arr, int countNumbersWhoNeedDelete){
+
+        if (countNumbersWhoNeedDelete > arr.size() || countNumbersWhoNeedDelete < 0){
+            return null;
+        }
 
         while (countNumbersWhoNeedDelete > 0){
             double minEl = Math.abs(arr.get(0));
@@ -124,5 +128,32 @@ public class ExecuterHaar extends AbstractExecuter {
             result.add(arr);
         }
         return result;
+    }
+
+    //Поиск количества элементов которые можно безболезненно отбросить(не превычая указанную точность)
+    public int searchCountElemWhoMayBeDel(Accurancy accurancy, List<Double> arrReal, double goal){
+        arrReal = proveAndConvertToDouble(arrReal);
+        List<List<Double>> tempArrTransform = transformHaar(arrReal);
+
+        List<Double> needArrTransform = tempArrTransform.get(tempArrTransform.size()-1);
+        int numDel = 0;  // числа которые можно удалить
+        List<Double> comprArr = compressArr(new ArrayList<>(needArrTransform), numDel);
+
+        tempArrTransform = remoteTransformHaar(comprArr);
+        List<Double> arrRemote = tempArrTransform.get(tempArrTransform.size()-1);
+
+        for (int i = 0; i < comprArr.size(); i++){
+            double pogr = accurancy.calcAccuracy(arrReal, arrRemote);
+            if (pogr < goal){
+                numDel++;
+            }else {
+                return --numDel;
+            }
+            comprArr = compressArr(new ArrayList<>(needArrTransform), numDel);
+            tempArrTransform = remoteTransformHaar(comprArr);
+            arrRemote = tempArrTransform.get(tempArrTransform.size()-1);
+
+        }
+        return numDel;
     }
 }
