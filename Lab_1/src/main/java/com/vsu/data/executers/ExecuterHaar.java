@@ -1,17 +1,17 @@
-package com.vsu.data;
+package com.vsu.data.executers;
 
 import com.vsu.data.wave.*;
 import org.apache.commons.math3.util.Precision;
 
 import java.util.*;
 
-public class ExecuterHaar extends AbstractExecuter{
+public class ExecuterHaar extends AbstractExecuter {
 
     public ExecuterHaar() {
     }
 
     public ExecuterHaar(Func func, double a, double b, double m, int accuracy) {
-        super(new Haar(), func, a, b, m, accuracy);
+        super(new Haar(), func, a, b, m, -1, accuracy);
     }
 
     @Override
@@ -22,9 +22,9 @@ public class ExecuterHaar extends AbstractExecuter{
 
 
         for (int i = 1; i <= this.m; i++){
-            int n = (int)Math.pow(2.0, i);
+            this.n = (int)Math.pow(2.0, i);
 
-            for (int j=1; j <= n; j++) {
+            for (int j=1; j <= this.n; j++) {
                 this.resultList.add(
                         new PointWave(
                                 i, j,

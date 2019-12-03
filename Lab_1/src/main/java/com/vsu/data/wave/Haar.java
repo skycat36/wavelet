@@ -1,6 +1,6 @@
 package com.vsu.data.wave;
 
-public class Haar extends Wave {
+public class Haar extends MatherWave {
 
     @Override
     public double calcWave(double  x, int i, int j) {

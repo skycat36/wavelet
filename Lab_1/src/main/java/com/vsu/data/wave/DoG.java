@@ -1,6 +1,6 @@
 package com.vsu.data.wave;
 
-public class DoG extends Wave {
+public class DoG extends MatherWave {
 
     @Override
     public double funcWeve(double x) {

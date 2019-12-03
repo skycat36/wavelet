@@ -1,6 +1,6 @@
 package com.vsu.data.wave;
 
-public abstract class Wave {
+public abstract class MatherWave {
 
     private double calcNeedPoint(double x, int a, int b){
         return  (x - b) / a;
